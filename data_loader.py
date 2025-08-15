@@ -32,7 +32,6 @@ class KeyFeatureDataLoader:
         stocks_file=None,
         trading_calendar=None,
         data_dir="stock_data",
-        cache_dir=None,
         use_baostock=False,
         tushare_token="8b1ef90e2f704b9d90e09a0de94078ff5ae6c5c18cc3382e75b879b7",
     ):
@@ -56,15 +55,11 @@ class KeyFeatureDataLoader:
         self.scalers = {}
 
         self.data_dir = data_dir
-        self.cache_dir = cache_dir or os.path.join(data_dir, "cache")
         os.makedirs(self.data_dir, exist_ok=True)
-        os.makedirs(self.cache_dir, exist_ok=True)
         os.makedirs(SCALER_DIR, exist_ok=True)
 
         # 初始化交易日历
-        self.calendar = TradingCalendar(
-            os.path.join(self.cache_dir, "trading_calendar.csv")
-        )
+        self.calendar = TradingCalendar("trading_calendar.csv")
         self.is_tushare_logged_in = False
         self.requires_tushare = False
         self.trading_calendar = trading_calendar
@@ -1051,8 +1046,7 @@ class KeyFeatureDataLoader:
             raise ValueError("未获取到任何成分股数据")
 
         # 创建保存scaler的目录
-        scaler_dir = os.path.join(self.cache_dir, "scalers")
-        os.makedirs(scaler_dir, exist_ok=True)
+        os.makedirs(SCALER_DIR, exist_ok=True)
 
         # 初始化训练和测试序列
         train_sequences = []
@@ -1071,7 +1065,7 @@ class KeyFeatureDataLoader:
                 normalized_data, scaler = self.preprocess_data(stock_data, target_type)
 
                 # 保存该股票的scaler（按股票代码命名）
-                scaler_path = os.path.join(scaler_dir, f"scaler_{symbol}.pth")
+                scaler_path = os.path.join(SCALER_DIR, f"scaler_{symbol}.pth")
                 torch.save(scaler, scaler_path)
                 print(f"已保存{symbol}的scaler至: {scaler_path}")
 

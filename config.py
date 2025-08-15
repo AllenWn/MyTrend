@@ -46,9 +46,8 @@ MIN_IMPROVEMENT = 0.001  # 最小提升阈值
 MAX_GRAD_NORM = 1.0  # 梯度裁剪阈值
 
 # 路径配置
-CACHE_DIR = "stock_data/cache"
-SCALER_DIR = os.path.join(CACHE_DIR, "scalers")
-MODEL_DIR = os.path.join(CACHE_DIR, "models")
+SCALER_DIR = "stock_data/scalers"
+MODEL_DIR = "models"
 METRICS_DIR = "metrics"
 os.makedirs(MODEL_DIR, exist_ok=True)
 os.makedirs(METRICS_DIR, exist_ok=True)

@@ -23,23 +23,19 @@ class StockPredictor:
     def __init__(
         self,
         model_path=MODEL_PATH,  # 从config导入动态模型路径
-        stocks_file="data/hs300_stocks_predict.csv",
+        stocks_file="data_list/hs300_stocks_predict.csv",
         data_dir="stock_data",
-        cache_dir="stock_data/cache",
         tushare_token="8b1ef90e2f704b9d90e09a0de94078ff5ae6c5c18cc3382e75b879b7",
     ):
         self.model_path = model_path
         self.feature_cols = FEATURE_COLS  # 特征列也从config导入，确保与训练一致
         self.stocks_file = stocks_file
         self.data_dir = data_dir
-        self.cache_dir = cache_dir
         self.tushare_token = tushare_token
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
         # 特征列（与训练时严格一致）
         self.model = self._load_model()  # 加载模型
-        self.calendar = TradingCalendar(
-            os.path.join(self.cache_dir, "trading_calendar.csv")
-        )
+        self.calendar = TradingCalendar("trading_calendar.csv")
         self.calendar.update()
 
         # 初始化数据加载器
@@ -245,8 +241,7 @@ class StockPredictor:
 
         # 7. 加载并验证缩放器（与10个特征匹配）
         # 加载该股票的专属scaler
-        scaler_dir = os.path.join(self.cache_dir, "scalers")
-        scaler_path = os.path.join(scaler_dir, f"scaler_{symbol}.pth")
+        scaler_path = os.path.join(SCALER_DIR, f"scaler_{symbol}.pth")
 
         if not os.path.exists(scaler_path):
             raise FileNotFoundError(f"未找到{symbol}的scaler文件: {scaler_path}")
@@ -333,8 +328,7 @@ class StockPredictor:
             raise ValueError(f"缺少特征列: {missing_features}")
 
         # 7. 加载或生成scaler（核心修改）
-        scaler_dir = os.path.join(self.cache_dir, "scalers")
-        scaler_path = os.path.join(scaler_dir, f"scaler_{symbol}.pth")
+        scaler_path = os.path.join(SCALER_DIR, f"scaler_{symbol}.pth")
 
         # 优先加载预训练scaler
         if os.path.exists(scaler_path):

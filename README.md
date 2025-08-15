@@ -18,9 +18,15 @@ Mytrend/
 ├── predict.py                # 股票预测模块
 ├── trading_calendar.py       # 交易日历管理
 ├── extract_raw_data.py       # 原始数据提取工具
-├── data/                     # 数据目录
+├── data_list/                # 数据目录
 │   ├── hs300_stocks.csv      # 沪深300成分股列表
 │   └── hs300_stocks_predict.csv  # 预测用成分股列表
+├── stock_data/               # 股票数据目录
+│   ├── scalers/              # 数据标准化器
+│   └── *.joblib              # 股票数据缓存文件
+├── models/                   # 训练好的模型文件
+├── trading_calendar.csv      # 交易日历文件
+├── metrics/                  # 模型评估指标和特征分析结果
 └── README.md                 # 项目说明文档
 ```
 
