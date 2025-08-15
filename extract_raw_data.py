@@ -35,7 +35,7 @@ def extract_raw_labeled_data():
         end_date=INITIAL_END_DATE,
         label_col="target",
         use_baostock=True,
-        stocks_file="data/hs300_stocks.csv",
+        stocks_file="stock_list/hs300_stocks.csv",
         tushare_token="8b1ef90e2f704b9d90e09a0de94078ff5ae6c5c18cc3382e75b879b7",
     )
     data_loader.requires_tushare = True
